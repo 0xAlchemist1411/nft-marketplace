@@ -1,29 +1,46 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema
+
 const notificationSchema = new mongoose.Schema({
-    admin: {
-        type: Schema.Types.ObjectId,
-        ref: "admin",
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        required: true
     },
-    notifications: [{
-        notificationType: String, //order, question_on_product, answer_on_product, review
-        notificationDetail: Object, //details in key/value
-        hasRead: {
-            type: Boolean,
-            default: false
-        },
-        date: {
-            type: Date
-        },
-        // hasSeen: {
-        //     type: Boolean,
-        //     default: false
-        // }
-    }],
-    noOfUnseen: {
-        type: Number,
-        default: 0
+    type: {
+        type: String,
+        enum: ['Sale', 'Purchase', 'Bid', 'Outbid', 'Auction Won', 'Auction Ended', 'New Follower', 'Price Drop', 'Offer Received', 'Offer Accepted', 'Transfer'],
+        required: true
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    message: {
+        type: String,
+        required: true
+    },
+    nft: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'NFT'
+    },
+    relatedUser: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+    },
+    link: {
+        type: String
+    },
+    isRead: {
+        type: Boolean,
+        default: false
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
-    
-});
-module.exports = mongoose.model('notification', notificationSchema);
+}, { timestamps: true });
+
+// Index
+notificationSchema.index({ user: 1, isRead: 1, createdAt: -1 });
+
+module.exports = mongoose.model('Notification', notificationSchema);

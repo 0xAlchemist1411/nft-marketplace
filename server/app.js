@@ -7,22 +7,26 @@ const userRouter = require("./routes/userRoute");
 const productRouter = require("./routes/productRoute");
 const paymentRouter = require("./routes/paymentRoute");
 const orderRouter = require("./routes/orderRoute");
+const nftRouter = require("./routes/nftRoute");
+const collectionRouter = require("./routes/collectionRoute");
 
 const app = express();
 
 // config
 if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config({ path: "backend/config/config.env" });
+  require("dotenv").config({ path: "server/.env" });
 }
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/api/user', userRouter);
-app.use('/api/product', productRouter);
-app.use('/api/payment', paymentRouter);
-app.use('/api/order', orderRouter);
-app.use(fileUpload());
+app.use("/api/user", userRouter);
+app.use("/api/product", productRouter);
+app.use("/api/payment", paymentRouter);
+app.use("/api/order", orderRouter);
+app.use("/api/nft", nftRouter);
+app.use("/api/collection", collectionRouter);
+app.use(fileUpload({ useTempFiles: true, tempFileDir: '/tmp/' }));
 
 // deployment
 __dirname = path.resolve();
